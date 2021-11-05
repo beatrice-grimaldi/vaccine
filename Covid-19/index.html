@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" name="author" content="Beatriz Grimaldi - Juan Camilo López" />
+        <!-- It allows that the design looks good on any web browser -->
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0"/>
+        <title>Covid-2019 Vaccine</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles.css" />
+    	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <h1 align="center">Vacunación COVID-19</h1><br>
+        <h2 align="center">Por favor responda las siguientes preguntas:</h2><br>
+        
+        <form action="" method="POST" id="form">
+            <div class="container">
+                <h4 style="text-align: center;">DATOS DE LA PERSONA</h4><br>
+                <label for="name" class="form-label">Nombres</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Nombres">  
+
+                <label for="name" class="form-label">Apellidos</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Apellidos">  
+
+                <label style="margin-bottom: 0.5rem;" >Tipo de Documento</label>
+                <select class="form-select" aria-label="Default select example" id="id_type" name="id_type">
+                    <option selected disabled value="">Seleccione tipo de Documento</option>
+                    <option value="0">Cédula de Ciudadanía</option>
+                    <option value="1">Tarjeta de Identidad</option>
+                    <option value="2">Cédula de Extranjeria</option>
+                    <option value="3">Pasaporte</option>
+                    <option value="4">Registro Civil</option>
+                </select>
+
+                <label for="cedula" class="form-label">Numero de Documento</label>
+                <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Numero de Documento" >  
+                
+                <label style="margin-bottom: 0.5rem;" >Tipo de biologíco con el que fue vacunado</label>
+                <select class="form-select" aria-label="Default select example" id="vacuna" name="vacuna">
+                    <option selected disabled value="">Seleccione tipo de biologíco</option>
+                    <option value="0">Pfizer</option>
+                    <option value="1">Moderna</option>
+                    <option value="2">AstraZeneca</option>
+                    <option value="3">Johnson & Johnson</option>
+                    <option value="4">CoronaVac</option>
+                </select>
+    
+                <label for="fecha" class="form-label">Fecha primera dosis</label>
+                <input type="date" class="form-control" id="fecha1" name="fecha1"> 
+                
+                <label for="fecha" class="form-label">Fecha segunda dosis</label>
+                <input type="date" class="form-control" id="fecha2" name="fecha2">
+                
+                <div id="gracias">
+                    <label class="form-label">Gracias por respoder el cuestionario</label> <br>
+                    <button type="submit" class="btn btn-info btn-lg">Enviar <i class="far fa-paper-plane"></i></button>
+                    <button type="reset" class="btn btn-info btn-lg" >Resetear <i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+        </form>
+        
+        <footer class="bg-light text-center text-lg-start">
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: #0dcaf0">
+              © 2021 Copyright:
+              <a class="text-dark" href="https://mdbootstrap.com/">COVID-2019</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+        <?php
+            if(isset($_POST['name']))
+            {
+                $nombre=$_POST['name'];
+                $apellido=$_POST['lastname'];
+                $idt=$_POST['id_type'];
+                $cedula=$_POST['cedula'];
+                $vacuna=$_POST['vacuna'];
+                $fechauna=$_POST['fecha1'];
+                $fechados=$_POST['fecha2'];
+
+                $fp = fopen('vacunacion.txt', 'a');
+                fwrite($fp, $nombre.";".$apellido.";".$idt.";".$cedula.";".$vacuna.";".$fechauna.";".$fechados.PHP_EOL);
+                fclose($fp); 
+            }
+        ?>
+        
+        <table>
+            <?php
+                if(!file_exists("vacunacion.txt"))
+                {
+                    echo "No existen datos registrados!";
+                    exit;
+                }
+
+                $file = fopen("vacunacion.txt", "r");
+
+                if(!file)
+                {
+                    echo "El archivo no pudo ser abierto!";
+                    exit;
+                }
+            ?>
+            <th>Nombre</th><th>Apellido</th><th>Tipo de ID</th><th>Número de Documento</th><th>Tipo del Biologico</th><th>Fecha Primera Dosis</th><th>Fecha Segunda Dosis</th>
+            <?php
+                while (!feof($file))
+                {   
+                    $data = fgets($file);
+                    $info=explode(";", $data);
+                    if (isset($info[1])){
+                        <tr>
+                        <td> <?= $info[0]?> </td>
+                        <td> <?= $info[1]?> </td>
+                        </tr>
+                    }
+                }
+                fclose($file);
+            ?>
+        </table>
+    </body>
+</html>

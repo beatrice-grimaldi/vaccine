@@ -1,0 +1,21 @@
+#form label{
+    margin-top: 0.5rem;
+    font-weight: 900;
+}
+
+#form{
+	width:600px;
+	padding:16px;
+	border-radius:px;
+	margin:auto;
+	background-color:#ccc;
+}
+
+#gracias{
+    text-align: center;
+}
+
+footer{
+    margin-top: 2rem;
+    background-color: #0dcaf0;
+}
